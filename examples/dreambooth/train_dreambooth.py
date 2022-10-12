@@ -55,6 +55,12 @@ def parse_args():
         help="A folder containing the training data of class images.",
     )
     parser.add_argument(
+        "--special_prompt",
+        type=str,
+        default=None,
+        help="The prompt added to tokenizer as a special prompt",
+    )
+    parser.add_argument(
         "--instance_prompt",
         type=str,
         default=None,
@@ -409,6 +415,9 @@ def main():
         tokenizer = CLIPTokenizer.from_pretrained(args.tokenizer_name)
     elif args.pretrained_model_name_or_path:
         tokenizer = CLIPTokenizer.from_pretrained(args.pretrained_model_name_or_path, subfolder="tokenizer", use_auth_token=True)
+
+    if args.special_prompt:
+        tokenizer.add_tokens(args.special_prompt)
 
     # Load models and create wrapper for stable diffusion
     text_encoder = CLIPTextModel.from_pretrained(args.pretrained_model_name_or_path, subfolder="text_encoder", use_auth_token=True)
